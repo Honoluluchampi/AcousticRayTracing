@@ -10,7 +10,7 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
     auto theta = M_PI * 2.f * static_cast<double>(i) / static_cast<double>(ray_count);
     vec2d direction = vec2d{std::cos(theta), std::sin(theta)};
     rays[i] = Ray{
-      .direction = direction,
+      .direction = direction.normalized(),
       .origin = origin,
       .ref_count = reflection_count,
       .length = 0.f
@@ -48,10 +48,10 @@ double intersection_ray_sphere(const Ray &ray, const Sphere &sphere)
   double b = 2.f * (ray.direction.dot(ray.origin - sphere.center));
   double c = (ray.origin - sphere.center).squaredNorm() - sphere.radius * sphere.radius;
 
-  auto judge = b * b - a * c;
+  auto judge = b * b - 4.f * a * c;
   // return the closer intersection point
-  if (judge > 0) {
-    return (-2.f * b - std::sqrt(b * b - 4.f * a * c)) / (2.f * a);
+  if (judge >= 0) {
+    return (-b - std::sqrt(b * b - 4.f * a * c)) / (2.f * a);
   } else
     return NO_INTERSECTION;
 }
