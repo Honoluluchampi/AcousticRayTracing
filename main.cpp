@@ -12,16 +12,16 @@ const std::array<vec2d, 6> points = {
 
 int main()
 {
-  Room room = {
+  ART::Room room = {
     .walls {
-      {points[0], points[1] },
-      {points[1], points[2] },
-      {points[2], points[3] },
-      {points[3], points[0] },
-      {points[4], points[5] }
+      { points[0], points[1] },
+      { points[1], points[2] },
+      { points[2], points[3] },
+      { points[3], points[0] },
+      { points[4], points[5] }
   }};
 
-  Sphere source = {
+  ART::Sphere source = {
     .center { 0.5f, 0.5f },
     .radius { 0.4f }
   };

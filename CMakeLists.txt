@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.23)
 project(acoustic_ray_tracing)
 
 set(CMAKE_CXX_STANDARD 20)

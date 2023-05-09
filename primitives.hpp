@@ -14,7 +14,7 @@ struct Ray
   vec2d direction;
   vec2d origin;
   int ref_count; // reflection count
-  double length;
+  double length = 0.f; // accumulative sum of the path
 };
 
 struct Sphere
