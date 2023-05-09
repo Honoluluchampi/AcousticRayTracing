@@ -42,6 +42,7 @@ double intersection_ray_line(const Ray &ray, const Line &line)
 }
 
 // assume source is represented as sphere
+// TODO : consider rays from inside the sphere
 double intersection_ray_sphere(const Ray &ray, const Sphere &sphere)
 {
   double a = ray.direction.squaredNorm();
@@ -51,9 +52,12 @@ double intersection_ray_sphere(const Ray &ray, const Sphere &sphere)
   auto judge = b * b - 4.f * a * c;
   // return the closer intersection point
   if (judge >= 0) {
-    return (-b - std::sqrt(b * b - 4.f * a * c)) / (2.f * a);
-  } else
-    return NO_INTERSECTION;
+    auto t = (-b - std::sqrt(b * b - 4.f * a * c)) / (2.f * a);
+    if (t > 0.f)
+      return t;
+  }
+
+  return NO_INTERSECTION;
 }
 
 } // namespace ART
