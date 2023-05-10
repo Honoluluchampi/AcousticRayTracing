@@ -121,15 +121,14 @@ double IR::add_ray_hit(const Ray &ray)
 
 void IR::compute_IR(
   std::vector<Ray> &rays,
-  const std::vector<Line> &walls,
-  const std::vector<Sphere> &sources,
+  const Scene& scene,
   int max_ref_count)
 {
   ir_series.resize(static_cast<size_t>(sampling_rate * duration), 0.f);
 
   // trace each rays
   for (auto& ray : rays) {
-    if (ray.trace(walls, sources, max_ref_count)) {
+    if (ray.trace(scene.walls, scene.sources, max_ref_count)) {
       add_ray_hit(ray);
     }
   }

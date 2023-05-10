@@ -13,18 +13,17 @@ const std::array<vec2d, 6> points = {
 
 int main()
 {
-  ART::Room room = {
+  ART::Scene scene_with_wall = {
     .walls {
       { .start = points[0], .end = points[1] },
       { .start = points[1], .end = points[2] },
       { .start = points[2], .end = points[3] },
       { .start = points[3], .end = points[0] },
       { .start = points[4], .end = points[5] }
-  }};
-
-  ART::Sphere source = {
-    .center = { 0.5f, 0.5f },
-    .radius = 0.4f
+    },
+    .sources {
+      { .center = { 0.5f, 0.5f }, .radius = 0.4f }
+    }
   };
 
   vec2d listener1 = { 2.5f, 0.5f };
@@ -38,18 +37,41 @@ int main()
     .sampling_rate = 100.f,
     .duration = 1.f,
     .sound_speed = 310.f,
-    .decrease_rate = 0.95f
+    .decrease_rate = 1.f
   };
 
   ART::IR ir2 = {
     .sampling_rate = 100.f,
     .duration = 1.f,
     .sound_speed = 310.f,
-    .decrease_rate = 0.95f
+    .decrease_rate = 1.f
   };
 
-  ir1.compute_IR(rays1, room.walls, {source}, 200);
-  ir2.compute_IR(rays2, room.walls, {source}, 200);
+  ART::Scene small_room = {
+    .walls {
+      { .start = {0.f, 0.f}, .end = {1.f, 0.f} },
+      { .start = {1.f, 1.f}, .end = {1.f, 0.f} },
+      { .start = {1.f, 1.f}, .end = {0.f, 1.f} },
+      { .start = {0.f, 1.f}, .end = {0.f, 0.f} }
+    },
+    .sources {
+      { .center = {0.2f, 0.2f}, .radius = 0.1f }
+    }
+  };
+
+  ART::IR ir3 = {
+    .sampling_rate = 100.f,
+    .duration = 1.f,
+    .sound_speed = 310.f,
+    .decrease_rate = 1.f
+  };
+
+  vec2d listener3 = { 0.8f, 0.8f };
+  auto rays3 = ART::create_rays(listener3, ray_count);
+
+  ir1.compute_IR(rays1, scene_with_wall, 500);
+  ir2.compute_IR(rays2, scene_with_wall, 500);
+  ir3.compute_IR(rays3, small_room, 500);
 
   // write to the output file
   std::ofstream ofs1("/home/honolulu/programs/acoustic_ray_tracing/data/listener1.ir");
@@ -60,5 +82,10 @@ int main()
   std::ofstream ofs2("/home/honolulu/programs/acoustic_ray_tracing/data/listener2.ir");
   for (auto& val : ir2.ir_series) {
     ofs2 << val / ray_count << std::endl;
+  }
+
+  std::ofstream ofs3("/home/honolulu/programs/acoustic_ray_tracing/data/small_room.ir");
+  for (auto& val : ir3.ir_series) {
+    ofs3 << val / ray_count << std::endl;
   }
 }

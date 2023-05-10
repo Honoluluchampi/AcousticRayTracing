@@ -25,9 +25,10 @@ struct Line
   obj_id id = assign_id++;
 };
 
-struct Room
+struct Scene
 {
   std::vector<Line> walls;
+  std::vector<Sphere> sources;
 };
 
 struct Ray
@@ -59,8 +60,7 @@ struct IR
 
   void compute_IR(
     std::vector<Ray>& rays,
-    const std::vector<Line>& walls,
-    const std::vector<Sphere>& sources,
+    const Scene& scene,
     int max_ref_count);
 
   double sampling_rate;
