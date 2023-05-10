@@ -1,5 +1,6 @@
 #include "primitives.hpp"
 #include <iostream>
+#include <fstream>
 
 const std::array<vec2d, 6> points = {
   vec2d{ 0.f, 0.f },
@@ -29,18 +30,35 @@ int main()
   vec2d listener1 = { 2.5f, 0.5f };
   vec2d listener2 = { 0.5f, 1.5f };
 
-  auto rays = ART::create_rays(listener2, 500);
+  auto ray_count = 500;
+  auto rays1 = ART::create_rays(listener1, ray_count);
+  auto rays2 = ART::create_rays(listener2, ray_count);
 
-  ART::IR ir = {
+  ART::IR ir1 = {
     .sampling_rate = 100.f,
     .duration = 1.f,
     .sound_speed = 310.f,
     .decrease_rate = 0.95f
   };
 
-  ir.compute_IR(rays, room.walls, {source}, 200);
+  ART::IR ir2 = {
+    .sampling_rate = 100.f,
+    .duration = 1.f,
+    .sound_speed = 310.f,
+    .decrease_rate = 0.95f
+  };
 
-  for (auto& val : ir.ir_series) {
-    std::cout << val << std::endl;
+  ir1.compute_IR(rays1, room.walls, {source}, 200);
+  ir2.compute_IR(rays2, room.walls, {source}, 200);
+
+  // write to the output file
+  std::ofstream ofs1("/home/honolulu/programs/acoustic_ray_tracing/data/listener1.ir");
+  for (auto& val : ir1.ir_series) {
+    ofs1 << val / ray_count << std::endl;
+  }
+
+  std::ofstream ofs2("/home/honolulu/programs/acoustic_ray_tracing/data/listener2.ir");
+  for (auto& val : ir2.ir_series) {
+    ofs2 << val / ray_count << std::endl;
   }
 }
