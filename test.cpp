@@ -163,17 +163,17 @@ TEST(ray_trace, trace) {
 // impulse response -------------------------------------------------------------------------
 TEST(impulse_response, ctor)
 {
-  ART::IR ir(1000.f, 2.f, 1.f, 0.8f);
+  ART::IR ir = {.sampling_rate = 1000.f, .duration = 2.f, .sound_speed = 1.f, .decrease_rate = 0.8f};
   EXPECT_EQ(ir.sampling_rate, 1000.f);
   EXPECT_EQ(ir.duration, 2.f);
   EXPECT_EQ(ir.sound_speed, 1.f);
   EXPECT_EQ(ir.decrease_rate, 0.8f);
-  EXPECT_EQ(ir.ir_series.size(), 2000);
 }
 
 TEST(impulse_response, add_ray_hit)
 {
-  ART::IR ir(100.f, 2.f, 10.f, 0.8f);
+  ART::IR ir = {.sampling_rate = 100.f, .duration = 2.f, .sound_speed = 10.f, .decrease_rate = 0.8f};
+  ir.ir_series.resize(200, 0.f);
   ART::Ray ray1 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 10.f};
   ART::Ray ray2 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 30.f};
 

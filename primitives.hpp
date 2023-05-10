@@ -54,21 +54,14 @@ struct Ray
 // Impulse Response
 struct IR
 {
-  explicit IR(
-    double _sampling_rate,
-    double _duration,
-    double _sound_speed,
-    double _decrease_rate)
-  {
-    sampling_rate = _sampling_rate;
-    duration = _duration;
-    sound_speed = _sound_speed;
-    decrease_rate = _decrease_rate;
-    ir_series.resize(static_cast<uint32_t>(sampling_rate * duration), 0.f);
-  }
-
   // returns added ray's amplitude
   double add_ray_hit(const Ray& ray);
+
+  void compute_IR(
+    std::vector<Ray>& rays,
+    const std::vector<Line>& walls,
+    const std::vector<Sphere>& sources,
+    int max_ref_count);
 
   double sampling_rate;
   double duration;
