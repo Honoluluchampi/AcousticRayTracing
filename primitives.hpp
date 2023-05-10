@@ -9,14 +9,6 @@ namespace ART {
 
 static double NO_INTERSECTION = -1;
 
-struct Ray
-{
-  vec2d direction;
-  vec2d origin;
-  int ref_count; // reflection count
-  double length = 0.f; // accumulative sum of the path
-};
-
 struct Sphere
 {
   vec2d center;
@@ -32,6 +24,16 @@ struct Line
 struct Room
 {
   std::vector<Line> walls;
+};
+
+struct Ray
+{
+  vec2d direction;
+  vec2d origin;
+  int ref_count; // reflection count
+  double acc_length = 0.f; // accumulative sum of the path length
+
+  void reflect(const Line& wall, double length);
 };
 
 std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count);

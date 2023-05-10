@@ -2,6 +2,21 @@
 
 namespace ART {
 
+void Ray::reflect(const Line &wall, double length)
+{
+  ref_count -= 1;
+  acc_length += length;
+
+  // calc new origin (reflecting point)
+  origin = origin + direction * length;
+
+  // calc new direction
+  auto wall_d = (wall.end - wall.start);
+  auto wall_n = vec2d{-wall_d.y(), wall_d.x()}.normalized();
+  direction = direction - (2.f * direction.dot(wall_n)) * wall_n;
+  direction.normalize();
+}
+
 // create rays which directions are radial
 std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
 {
@@ -13,7 +28,7 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
       .direction = direction.normalized(),
       .origin = origin,
       .ref_count = reflection_count,
-      .length = 0.f
+      .acc_length = 0.f
     };
   }
   return rays;

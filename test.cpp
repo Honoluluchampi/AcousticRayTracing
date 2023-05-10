@@ -23,7 +23,7 @@ TEST(util_functions, create_rays) {
   EXPECT_EQ(rays.size(), 8);
   EXPECT_EQ(rays[0].origin, vec2d(2.f, 3.f));
   EXPECT_EQ(rays[0].ref_count, 100);
-  EXPECT_EQ(rays[0].length, 0.f);
+  EXPECT_EQ(rays[0].acc_length, 0.f);
 
   // direction
   EXPECT_TRUE(NEQ(rays[0].direction, vec2d(1.f, 0.f)));
