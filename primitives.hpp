@@ -33,13 +33,13 @@ struct Ray
   int ref_count; // reflection count
   double acc_length = 0.f; // accumulative sum of the path length
 
+  // return -1 if not intersected
+  double intersection(const Line &line) const;
+  double intersection(const Sphere &sphere) const;
+
   void reflect(const Line& wall, double length);
 };
 
 std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count);
-
-// return -1 if not intersected
-double intersection_ray_line(const Ray &ray, const Line &line);
-double intersection_ray_sphere(const Ray &ray, const Sphere &sphere);
 
 } // namespace ART

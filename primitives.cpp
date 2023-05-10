@@ -36,11 +36,11 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
 
 // returns 2D-point if intersects
 // https://rootllama.wordpress.com/2014/06/20/ray-line-segment-intersection-test-in-2d/
-double intersection_ray_line(const Ray &ray, const Line &line)
+double Ray::intersection(const Line &line) const
 {
-  const auto v1 = ray.origin - line.start;
+  const auto v1 = origin - line.start;
   const auto v2 = line.end - line.start;
-  const auto v3 = vec2d{-ray.direction.y(), ray.direction.x()};
+  const auto v3 = vec2d{-direction.y(), direction.x()};
 
   double eps = 1e-6;
   if (std::abs(v2.dot(v3)) < eps)
@@ -58,11 +58,11 @@ double intersection_ray_line(const Ray &ray, const Line &line)
 
 // assume source is represented as sphere
 // TODO : consider rays from inside the sphere
-double intersection_ray_sphere(const Ray &ray, const Sphere &sphere)
+double Ray::intersection(const Sphere &sphere) const
 {
-  double a = ray.direction.squaredNorm();
-  double b = 2.f * (ray.direction.dot(ray.origin - sphere.center));
-  double c = (ray.origin - sphere.center).squaredNorm() - sphere.radius * sphere.radius;
+  double a = direction.squaredNorm();
+  double b = 2.f * (direction.dot(origin - sphere.center));
+  double c = (origin - sphere.center).squaredNorm() - sphere.radius * sphere.radius;
 
   auto judge = b * b - 4.f * a * c;
   // return the closer intersection point

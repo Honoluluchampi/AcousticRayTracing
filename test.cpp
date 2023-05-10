@@ -37,8 +37,8 @@ TEST(intersection, ray_line_x) {
   ART::Line line1 = {.start = {10.f, 1.f}, .end = {10.f, 3.f}};
   ART::Line line2 = {.start = {-10.f, 1.f}, .end = {-10.f, 3.f}};
 
-  EXPECT_EQ(ART::intersection_ray_line(ray, line1), 7.f);
-  EXPECT_EQ(ART::intersection_ray_line(ray, line2), ART::NO_INTERSECTION);
+  EXPECT_EQ(ray.intersection(line1), 7.f);
+  EXPECT_EQ(ray.intersection(line2), ART::NO_INTERSECTION);
 }
 
 TEST(intersection, ray_line_y) {
@@ -46,8 +46,8 @@ TEST(intersection, ray_line_y) {
   ART::Line line1 = {.start = {1.f, 10.f}, .end = {3.f, 10.f}};
   ART::Line line2 = {.start = {1.f, -10.f}, .end = {3.f, -10.f}};
 
-  EXPECT_EQ(ART::intersection_ray_line(ray, line1), 7.f);
-  EXPECT_EQ(ART::intersection_ray_line(ray, line2), ART::NO_INTERSECTION);
+  EXPECT_EQ(ray.intersection(line1), 7.f);
+  EXPECT_EQ(ray.intersection(line2), ART::NO_INTERSECTION);
 }
 
 TEST(intersection, ray_line) {
@@ -57,8 +57,8 @@ TEST(intersection, ray_line) {
   ART::Line line1 = {.start = {-5.f, -3.f}, .end = {-1.f, -3.f}};
   ART::Line line2 = {.start = {-5.f, -3.f}, .end = {-2.f, -1.f}};
 
-  NEARLY_EQ(ART::intersection_ray_line(ray, line1), std::sqrt(5.f));
-  NEARLY_EQ(ART::intersection_ray_line(ray, line2), ART::NO_INTERSECTION);
+  NEARLY_EQ(ray.intersection(line1), std::sqrt(5.f));
+  NEARLY_EQ(ray.intersection(line2), ART::NO_INTERSECTION);
 }
 
 TEST(intersection, ray_sphere) {
@@ -66,17 +66,17 @@ TEST(intersection, ray_sphere) {
   ART::Sphere sphere1 = {.center = {10.f, 4.f}, .radius = 3.f};
   ART::Sphere sphere2 = {.center = {10.f, 7.f}, .radius = 3.f};
 
-  EXPECT_EQ(ART::intersection_ray_sphere(ray1, sphere1), 7.f);
-  EXPECT_EQ(ART::intersection_ray_sphere(ray1, sphere2), 10.f);
+  EXPECT_EQ(ray1.intersection(sphere1), 7.f);
+  EXPECT_EQ(ray1.intersection(sphere2), 10.f);
 
   ART::Ray ray2 = {.direction = {-1.f, 0.f}, .origin = {3.f, -3.f + std::sqrt(2.f)}};
   ART::Sphere sphere3 = {.center = {-2.f, -3.f}, .radius = 2.f };
   ART::Sphere sphere4 = {.center = {5.f, -3.f}, .radius = 2.f };
   ART::Sphere sphere5 = {.center = {-2.f, -5.f}, .radius = 2.f };
 
-  NEARLY_EQ(ART::intersection_ray_sphere(ray2, sphere3), 5.f - std::sqrt(2.f));
-  EXPECT_EQ(ART::intersection_ray_sphere(ray2, sphere4), NO_INTERSECTION);
-  EXPECT_EQ(ART::intersection_ray_sphere(ray2, sphere5), NO_INTERSECTION);
+  NEARLY_EQ(ray2.intersection(sphere3), 5.f - std::sqrt(2.f));
+  EXPECT_EQ(ray2.intersection(sphere4), NO_INTERSECTION);
+  EXPECT_EQ(ray2.intersection(sphere5), NO_INTERSECTION);
 }
 
 } // namespace ART
