@@ -26,10 +26,10 @@ TEST(util_functions, create_rays) {
   EXPECT_EQ(rays[0].acc_length, 0.f);
 
   // direction
-  EXPECT_TRUE(NEQ(rays[0].direction, vec2d(1.f, 0.f)));
-  EXPECT_TRUE(NEQ(rays[2].direction, vec2d(0.f, 1.f)));
-  EXPECT_TRUE(NEQ(rays[3].direction, vec2d(-std::sqrt(2.f) / 2.f, std::sqrt(2.f) / 2.f)));
-  EXPECT_TRUE(NEQ(rays[7].direction, vec2d(std::sqrt(2.f) / 2.f, -std::sqrt(2.f) / 2.f)));
+  NEARLY_EQ(rays[0].direction, vec2d(1.f, 0.f));
+  NEARLY_EQ(rays[2].direction, vec2d(0.f, 1.f));
+  NEARLY_EQ(rays[3].direction, vec2d(-std::sqrt(2.f) / 2.f, std::sqrt(2.f) / 2.f));
+  NEARLY_EQ(rays[7].direction, vec2d(std::sqrt(2.f) / 2.f, -std::sqrt(2.f) / 2.f));
 }
 
 TEST(intersection, ray_line_x) {
@@ -77,6 +77,28 @@ TEST(intersection, ray_sphere) {
   NEARLY_EQ(ray2.intersection(sphere3), 5.f - std::sqrt(2.f));
   EXPECT_EQ(ray2.intersection(sphere4), NO_INTERSECTION);
   EXPECT_EQ(ray2.intersection(sphere5), NO_INTERSECTION);
+}
+
+TEST(reflect, ray_line) {
+  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2};
+  ART::Line wall1 = {.start = {10.f, 1.f}, .end = {10.f, -1.f}};
+  ART::Line wall2 = {.start = {-10.f, 1.f}, .end = {-10.f, -1.f}};
+
+  auto path_length1 = ray.intersection(wall1);
+  ray.reflect(wall1, path_length1);
+
+  NEARLY_EQ(ray.acc_length, 10.f);
+  NEARLY_EQ(ray.ref_count, 1);
+  NEARLY_EQ(ray.direction, vec2d(-1.f, 0.f));
+  NEARLY_EQ(ray.origin, vec2d(10.f, 0.f));
+
+  auto path_length2 = ray.intersection(wall2);
+  ray.reflect(wall2, path_length2);
+
+  NEARLY_EQ(ray.acc_length, 30.f);
+  NEARLY_EQ(ray.ref_count, 0);
+  NEARLY_EQ(ray.direction, vec2d(1.f, 0.f));
+  NEARLY_EQ(ray.origin, vec2d(-10.f, 0.f));
 }
 
 } // namespace ART

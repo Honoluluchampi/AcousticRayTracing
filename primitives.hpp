@@ -7,7 +7,7 @@ using vec2d = Eigen::Vector2d;
 // Acoustic Ray Tracing
 namespace ART {
 
-static double NO_INTERSECTION = -1;
+static double NO_INTERSECTION = std::numeric_limits<double>::min();
 
 struct Sphere
 {
