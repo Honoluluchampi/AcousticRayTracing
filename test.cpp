@@ -145,6 +145,21 @@ TEST(closest_hit, ray_sphere)
   EXPECT_EQ(ans.first.id, spheres[2].id);
 }
 
+TEST(ray_trace, trace) {
+  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}};
+  std::vector<ART::Sphere> sources = {
+    {.center = {4.f, 4.f}, .radius = 1.f}
+  };
+  std::vector<ART::Line> walls = {
+    {.start = {3.f, -1.f}, .end = {5.f, 1.f}},
+    {.start = {1.f, 1.f},  .end = {2.f, 2.f}}
+  };
+
+  EXPECT_TRUE(ray.trace(walls, sources, 1));
+  EXPECT_EQ(ray.ref_count, 1);
+  EXPECT_EQ(ray.acc_length, 7.f);
+}
+
 // impulse response -------------------------------------------------------------------------
 TEST(impulse_response, ctor)
 {

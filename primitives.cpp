@@ -22,7 +22,7 @@ void Ray::hit_sphere(const Sphere &sphere, double length)
 
 bool Ray::trace(const std::vector<Line>& walls, const std::vector<Sphere>& sources, int max_ref_count)
 {
-  while (ref_count < max_ref_count) {
+  while (ref_count <= max_ref_count) {
     const auto c_wall   = closest_hit(walls);
     const auto c_source = closest_hit(sources);
 
