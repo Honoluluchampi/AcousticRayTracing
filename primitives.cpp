@@ -74,7 +74,7 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count)
 }
 
 // Impulse Response ---------------------------------------------------------------
-void IR::add_ray_hit(const Ray &ray)
+double IR::add_ray_hit(const Ray &ray)
 {
   // calc amplitude
   double amplitude = std::pow(decrease_rate, ray.ref_count);
@@ -82,12 +82,14 @@ void IR::add_ray_hit(const Ray &ray)
   // calc decay time
   double decay = ray.acc_length / sound_speed;
   if (decay > duration)
-    return;
+    return 0.f;
 
   // calc ir vector index
   auto index = static_cast<uint32_t>(decay * sampling_rate);
 
   ir_series[index] += amplitude;
+
+  return amplitude;
 }
 
 

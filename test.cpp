@@ -159,9 +159,14 @@ TEST(impulse_response, ctor)
 TEST(impulse_response, add_ray_hit)
 {
   ART::IR ir(100.f, 2.f, 10.f, 0.8f);
-  ART::Ray ray {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 10.f};
+  ART::Ray ray1 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 10.f};
+  ART::Ray ray2 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 30.f};
 
-  ir.add_ray_hit(ray);
+  auto amp1 = ir.add_ray_hit(ray1);
+  NEARLY_EQ(amp1, 0.64f);
   NEARLY_EQ(ir.ir_series[100], 0.64f);
+
+  auto amp2 = ir.add_ray_hit(ray2);
+  NEARLY_EQ(amp2, 0.f);
 }
 } // namespace ART

@@ -64,7 +64,8 @@ struct IR
     ir_series.resize(static_cast<uint32_t>(sampling_rate * duration), 0.f);
   }
 
-  void add_ray_hit(const Ray& ray);
+  // returns added ray's amplitude
+  double add_ray_hit(const Ray& ray);
 
   double sampling_rate;
   double duration;
