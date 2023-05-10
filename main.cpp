@@ -22,8 +22,8 @@ int main()
   }};
 
   ART::Sphere source = {
-    .center { 0.5f, 0.5f },
-    .radius { 0.4f }
+    .center = { 0.5f, 0.5f },
+    .radius = 0.4f
   };
 
   vec2d lister1 = { 2.5f, 0.5f };

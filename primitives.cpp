@@ -4,7 +4,7 @@ namespace ART {
 
 void Ray::reflect(const Line &wall, double length)
 {
-  ref_count -= 1;
+  ref_count += 1;
   acc_length += length;
 
   // calc new origin (reflecting point)
@@ -18,7 +18,7 @@ void Ray::reflect(const Line &wall, double length)
 }
 
 // create rays which directions are radial
-std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
+std::vector<Ray> create_rays(vec2d origin, int ray_count)
 {
   std::vector<Ray> rays(ray_count);
   for (int i = 0; i < ray_count; i++) {
@@ -26,9 +26,7 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count)
     vec2d direction = vec2d{std::cos(theta), std::sin(theta)};
     rays[i] = Ray{
       .direction = direction.normalized(),
-      .origin = origin,
-      .ref_count = reflection_count,
-      .acc_length = 0.f
+      .origin = origin
     };
   }
   return rays;

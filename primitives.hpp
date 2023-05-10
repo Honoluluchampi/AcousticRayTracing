@@ -34,7 +34,7 @@ struct Ray
 {
   vec2d direction;
   vec2d origin;
-  int ref_count; // reflection count
+  int ref_count = 0; // reflection count
   double acc_length = 0.f; // accumulative sum of the path length
 
   // return -1 if not intersected
@@ -48,7 +48,7 @@ struct Ray
   void reflect(const Line& wall, double length);
 };
 
-std::vector<Ray> create_rays(vec2d origin, int ray_count, int reflection_count);
+std::vector<Ray> create_rays(vec2d origin, int ray_count);
 
 // impl
 template <typename Obj>

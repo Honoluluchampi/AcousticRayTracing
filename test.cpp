@@ -32,12 +32,12 @@ TEST(assign_id, line_sphere) {
 }
 
 TEST(util_functions, create_rays) {
-  auto rays = ART::create_rays({2.f, 3.f}, 8, 100);
+  auto rays = ART::create_rays({2.f, 3.f}, 8);
 
   // common parameters
   EXPECT_EQ(rays.size(), 8);
   EXPECT_EQ(rays[0].origin, vec2d(2.f, 3.f));
-  EXPECT_EQ(rays[0].ref_count, 100);
+  EXPECT_EQ(rays[0].ref_count, 0);
   EXPECT_EQ(rays[0].acc_length, 0.f);
 
   // direction
@@ -95,7 +95,7 @@ TEST(intersection, ray_sphere) {
 }
 
 TEST(reflect, ray_line) {
-  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2};
+  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}};
   ART::Line wall1 = {.start = {10.f, 1.f}, .end = {10.f, -1.f}};
   ART::Line wall2 = {.start = {-10.f, 1.f}, .end = {-10.f, -1.f}};
 
@@ -103,7 +103,7 @@ TEST(reflect, ray_line) {
   ray.reflect(wall1, path_length1);
 
   NEARLY_EQ(ray.acc_length, 10.f);
-  NEARLY_EQ(ray.ref_count, 1);
+  EXPECT_EQ(ray.ref_count, 1);
   NEARLY_EQ(ray.direction, vec2d(-1.f, 0.f));
   NEARLY_EQ(ray.origin, vec2d(10.f, 0.f));
 
@@ -111,7 +111,7 @@ TEST(reflect, ray_line) {
   ray.reflect(wall2, path_length2);
 
   NEARLY_EQ(ray.acc_length, 30.f);
-  NEARLY_EQ(ray.ref_count, 0);
+  EXPECT_EQ(ray.ref_count, 2);
   NEARLY_EQ(ray.direction, vec2d(1.f, 0.f));
   NEARLY_EQ(ray.origin, vec2d(-10.f, 0.f));
 }
