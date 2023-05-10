@@ -46,6 +46,9 @@ struct Ray
   std::pair<const Obj&, double> closest_hit(const std::vector<Obj>& objs) const;
 
   void reflect(const Line& wall, double length);
+  void hit_sphere(const Sphere& sphere, double length);
+  // returns true if the ray intersects with any sound sources
+  bool trace(const std::vector<Line>& walls, const std::vector<Sphere>& sources, int max_ref_count);
 };
 
 // Impulse Response

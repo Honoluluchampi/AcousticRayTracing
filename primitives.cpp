@@ -17,6 +17,33 @@ void Ray::reflect(const Line &wall, double length)
   direction.normalize();
 }
 
+void Ray::hit_sphere(const Sphere &sphere, double length)
+{ acc_length += length; }
+
+bool Ray::trace(const std::vector<Line>& walls, const std::vector<Sphere>& sources, int max_ref_count)
+{
+  while (ref_count < max_ref_count) {
+    const auto c_wall   = closest_hit(walls);
+    const auto c_source = closest_hit(sources);
+
+    // ray is getting out of the domain
+    if (c_wall.second == NO_INTERSECTION && c_source.second == NO_INTERSECTION)
+      return false;
+
+    // if intersects with source
+    if (c_source.second <= c_wall.second) {
+      hit_sphere(c_source.first, c_source.second);
+      return true;
+    }
+    // intersects with wall
+    else if (c_wall.second < c_source.second) {
+      reflect(c_wall.first, c_wall.second);
+    }
+  }
+
+  return false;
+}
+
 // returns 2D-point if intersects
 // https://rootllama.wordpress.com/2014/06/20/ray-line-segment-intersection-test-in-2d/
 double Ray::intersection(const Line &line) const

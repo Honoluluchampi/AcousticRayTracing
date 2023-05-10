@@ -26,8 +26,8 @@ int main()
     .radius = 0.4f
   };
 
-  vec2d lister1 = { 2.5f, 0.5f };
-  vec2d lister2 = { 0.5f, 1.5f };
+  vec2d listener1 = { 2.5f, 0.5f };
+  vec2d listener2 = { 0.5f, 1.5f };
 
 
 }
