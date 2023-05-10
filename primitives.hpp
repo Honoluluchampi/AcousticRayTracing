@@ -48,6 +48,31 @@ struct Ray
   void reflect(const Line& wall, double length);
 };
 
+// Impulse Response
+struct IR
+{
+  explicit IR(
+    double _sampling_rate,
+    double _duration,
+    double _sound_speed,
+    double _decrease_rate)
+  {
+    sampling_rate = _sampling_rate;
+    duration = _duration;
+    sound_speed = _sound_speed;
+    decrease_rate = _decrease_rate;
+    ir_series.resize(static_cast<uint32_t>(sampling_rate * duration), 0.f);
+  }
+
+  void add_ray_hit(const Ray& ray);
+
+  double sampling_rate;
+  double duration;
+  double sound_speed; // could be temporary
+  double decrease_rate = 0.8f;
+  std::vector<double> ir_series;
+};
+
 std::vector<Ray> create_rays(vec2d origin, int ray_count);
 
 // impl

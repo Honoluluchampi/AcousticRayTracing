@@ -17,21 +17,6 @@ void Ray::reflect(const Line &wall, double length)
   direction.normalize();
 }
 
-// create rays which directions are radial
-std::vector<Ray> create_rays(vec2d origin, int ray_count)
-{
-  std::vector<Ray> rays(ray_count);
-  for (int i = 0; i < ray_count; i++) {
-    auto theta = M_PI * 2.f * static_cast<double>(i) / static_cast<double>(ray_count);
-    vec2d direction = vec2d{std::cos(theta), std::sin(theta)};
-    rays[i] = Ray{
-      .direction = direction.normalized(),
-      .origin = origin
-    };
-  }
-  return rays;
-}
-
 // returns 2D-point if intersects
 // https://rootllama.wordpress.com/2014/06/20/ray-line-segment-intersection-test-in-2d/
 double Ray::intersection(const Line &line) const
@@ -72,5 +57,38 @@ double Ray::intersection(const Sphere &sphere) const
 
   return NO_INTERSECTION;
 }
+
+// create rays which directions are radial
+std::vector<Ray> create_rays(vec2d origin, int ray_count)
+{
+  std::vector<Ray> rays(ray_count);
+  for (int i = 0; i < ray_count; i++) {
+    auto theta = M_PI * 2.f * static_cast<double>(i) / static_cast<double>(ray_count);
+    vec2d direction = vec2d{std::cos(theta), std::sin(theta)};
+    rays[i] = Ray{
+      .direction = direction.normalized(),
+      .origin = origin
+    };
+  }
+  return rays;
+}
+
+// Impulse Response ---------------------------------------------------------------
+void IR::add_ray_hit(const Ray &ray)
+{
+  // calc amplitude
+  double amplitude = std::pow(decrease_rate, ray.ref_count);
+
+  // calc decay time
+  double decay = ray.acc_length / sound_speed;
+  if (decay > duration)
+    return;
+
+  // calc ir vector index
+  auto index = static_cast<uint32_t>(decay * sampling_rate);
+
+  ir_series[index] += amplitude;
+}
+
 
 } // namespace ART
