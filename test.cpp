@@ -144,4 +144,20 @@ TEST(closest_hit, ray_sphere)
   EXPECT_EQ(ans.second, 2.f);
   EXPECT_EQ(ans.first.id, spheres[2].id);
 }
+
+// impulse response -------------------------------------------------------------------------
+TEST(impulse_response, ctor)
+{
+  ART::IR ir(1000.f, 2.f, 1.f, 0.8f);
+  EXPECT_EQ(ir.sampling_rate, 1000.f);
+  EXPECT_EQ(ir.duration, 2.f);
+  EXPECT_EQ(ir.sound_speed, 1.f);
+  EXPECT_EQ(ir.decrease_rate, 0.8f);
+  EXPECT_EQ(ir.ir_series.size(), 2000);
+}
+
+TEST(impulse_response, add_ray_hit)
+{
+
+}
 } // namespace ART
