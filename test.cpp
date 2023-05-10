@@ -116,4 +116,18 @@ TEST(reflect, ray_line) {
   NEARLY_EQ(ray.origin, vec2d(-10.f, 0.f));
 }
 
+TEST(closest_hit, ray_line) {
+  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}};
+  std::vector<ART::Line> walls = {
+    {.start = {5.f, 1.f}, .end = {5.f, -1.f}},
+    {.start = {-5.f, 1.f}, .end = {-5.f, -1.f}},
+    {.start = {3.f, 1.f}, .end = {3.f, -1.f}},
+    {.start = {10.f, 1.f}, .end = {10.f, -1.f}}
+  };
+
+  auto ans = ray.closest_hit(walls);
+  EXPECT_EQ(ans.second, 3.f);
+  EXPECT_EQ(ans.first.id, walls[2].id);
+}
+
 } // namespace ART
