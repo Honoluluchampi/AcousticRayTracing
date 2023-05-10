@@ -130,4 +130,18 @@ TEST(closest_hit, ray_line) {
   EXPECT_EQ(ans.first.id, walls[2].id);
 }
 
+TEST(closest_hit, ray_sphere)
+{
+  ART::Ray ray = {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}};
+  std::vector<ART::Sphere> spheres = {
+    {.center = {5.f, 0.f}, .radius = 1.f},
+    {.center = {-5.f, 0.f}, .radius = 3.f},
+    {.center = {3.f, 0.f}, .radius = 1.f},
+    {.center = {10.f, 0.f}, .radius = 3.f}
+  };
+
+  auto ans = ray.closest_hit(spheres);
+  EXPECT_EQ(ans.second, 2.f);
+  EXPECT_EQ(ans.first.id, spheres[2].id);
+}
 } // namespace ART
