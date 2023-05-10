@@ -16,6 +16,21 @@ bool NEQ(double a, double b) {
 
 #define NEARLY_EQ(a, b) EXPECT_TRUE(NEQ(a, b))
 
+
+TEST(assign_id, line_sphere) {
+  ART::Line line1;
+  ART::Line line2;
+  ART::Sphere sphere1;
+  ART::Line line3;
+  ART::Sphere sphere2;
+
+  EXPECT_EQ(line1.id,   0);
+  EXPECT_EQ(line2.id,   1);
+  EXPECT_EQ(sphere1.id, 2);
+  EXPECT_EQ(line3.id,   3);
+  EXPECT_EQ(sphere2.id, 4);
+}
+
 TEST(util_functions, create_rays) {
   auto rays = ART::create_rays({2.f, 3.f}, 8, 100);
 

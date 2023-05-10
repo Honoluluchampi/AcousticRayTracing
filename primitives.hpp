@@ -8,17 +8,21 @@ using vec2d = Eigen::Vector2d;
 namespace ART {
 
 static double NO_INTERSECTION = std::numeric_limits<double>::min();
+static uint32_t assign_id = 0;
+using obj_id = uint32_t;
 
 struct Sphere
 {
   vec2d center;
   double radius;
+  obj_id id = assign_id++;
 };
 
 struct Line
 {
   vec2d start;
   vec2d end;
+  obj_id id = assign_id++;
 };
 
 struct Room
