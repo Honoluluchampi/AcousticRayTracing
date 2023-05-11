@@ -22,7 +22,7 @@ int main()
       { .start = points[4], .end = points[5] }
     },
     .sources {
-      { .center = { 0.5f, 0.5f }, .radius = 0.4f }
+      { .center = { 0.5f, 0.5f }, .radius = 0.2f }
     }
   };
 
@@ -34,15 +34,15 @@ int main()
   auto rays2 = ART::create_rays(listener2, ray_count);
 
   ART::IR ir1 = {
-    .sampling_rate = 100.f,
-    .duration = 1.f,
+    .sampling_rate = 200.f,
+    .duration = 0.5f,
     .sound_speed = 310.f,
     .decrease_rate = 1.f
   };
 
   ART::IR ir2 = {
-    .sampling_rate = 100.f,
-    .duration = 1.f,
+    .sampling_rate = 200.f,
+    .duration = 0.5f,
     .sound_speed = 310.f,
     .decrease_rate = 1.f
   };
@@ -63,15 +63,16 @@ int main()
     .sampling_rate = 100.f,
     .duration = 1.f,
     .sound_speed = 310.f,
-    .decrease_rate = 1.f
+    .decrease_rate = 0.97f
   };
 
   vec2d listener3 = { 0.8f, 0.8f };
   auto rays3 = ART::create_rays(listener3, ray_count);
 
-  ir1.compute_IR(rays1, scene_with_wall, 500);
-  ir2.compute_IR(rays2, scene_with_wall, 500);
-  ir3.compute_IR(rays3, small_room, 500);
+  auto max_ref_count = 200;
+  ir1.compute_IR(rays1, scene_with_wall, max_ref_count);
+  ir2.compute_IR(rays2, scene_with_wall, max_ref_count);
+  ir3.compute_IR(rays3, small_room, max_ref_count);
 
   // write to the output file
   std::ofstream ofs1("/home/honolulu/programs/acoustic_ray_tracing/data/listener1.ir");

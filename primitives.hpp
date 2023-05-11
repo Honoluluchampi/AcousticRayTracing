@@ -38,6 +38,9 @@ struct Ray
   int ref_count = 0; // reflection count
   double acc_length = 0.f; // accumulative sum of the path length
 
+  // ref_count and acc_length of each source hit
+  std::vector<std::pair<int, double>> source_hit_infos;
+
   // return -1 if not intersected
   double intersection(const Line &line) const;
   double intersection(const Sphere &sphere) const;

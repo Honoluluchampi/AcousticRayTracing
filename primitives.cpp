@@ -22,26 +22,30 @@ void Ray::hit_sphere(const Sphere &sphere, double length)
 
 bool Ray::trace(const std::vector<Line>& walls, const std::vector<Sphere>& sources, int max_ref_count)
 {
+  bool hit_source = false;
+
   while (ref_count <= max_ref_count) {
     const auto c_wall   = closest_hit(walls);
     const auto c_source = closest_hit(sources);
 
     // ray is getting out of the domain
     if (c_wall.second == NO_INTERSECTION && c_source.second == NO_INTERSECTION)
-      return false;
+      return hit_source;
 
     // if intersects with source
     if (c_source.second <= c_wall.second) {
-      hit_sphere(c_source.first, c_source.second);
-      return true;
+      source_hit_infos.emplace_back(ref_count, acc_length + c_source.second);
+      hit_source = true;
     }
+
     // intersects with wall
-    else if (c_wall.second < c_source.second) {
-      reflect(c_wall.first, c_wall.second);
+    if (c_wall.second == NO_INTERSECTION) {
+      return hit_source;
     }
+    reflect(c_wall.first, c_wall.second);
   }
 
-  return false;
+  return hit_source;
 }
 
 // returns 2D-point if intersects
@@ -103,20 +107,25 @@ std::vector<Ray> create_rays(vec2d origin, int ray_count)
 // Impulse Response ---------------------------------------------------------------
 double IR::add_ray_hit(const Ray &ray)
 {
+  double whole_amplitude = 0.f;
+
   // calc amplitude
-  double amplitude = std::pow(decrease_rate, ray.ref_count);
+  for (const auto& hit_info : ray.source_hit_infos) {
+    double amplitude = std::pow(decrease_rate, hit_info.first);
 
-  // calc decay time
-  double decay = ray.acc_length / sound_speed;
-  if (decay > duration)
-    return 0.f;
+    // calc decay time
+    double decay = hit_info.second / sound_speed;
+    if (decay > duration)
+      return 0.f;
 
-  // calc ir vector index
-  auto index = static_cast<uint32_t>(decay * sampling_rate);
+    // calc ir vector index
+    auto index = static_cast<uint32_t>(decay * sampling_rate);
 
-  ir_series[index] += amplitude;
+    ir_series[index] += amplitude;
+    whole_amplitude += amplitude;
+  }
 
-  return amplitude;
+  return whole_amplitude;
 }
 
 void IR::compute_IR(
