@@ -55,7 +55,7 @@ int main()
       { .start = {0.f, 1.f}, .end = {0.f, 0.f} }
     },
     .sources {
-      { .center = {0.2f, 0.2f}, .radius = 0.1f }
+      { .center = {0.2f, 0.2f}, .radius = 0.01f }
     }
   };
 

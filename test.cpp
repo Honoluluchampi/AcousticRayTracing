@@ -156,8 +156,8 @@ TEST(ray_trace, trace) {
   };
 
   EXPECT_TRUE(ray.trace(walls, sources, 1));
-  EXPECT_EQ(ray.ref_count, 1);
-  EXPECT_EQ(ray.acc_length, 7.f);
+  EXPECT_EQ(ray.source_hit_infos[0].first, 1);
+  EXPECT_EQ(ray.source_hit_infos[0].second, 7.f);
 }
 
 // impulse response -------------------------------------------------------------------------
@@ -174,12 +174,14 @@ TEST(impulse_response, add_ray_hit)
 {
   ART::IR ir = {.sampling_rate = 100.f, .duration = 2.f, .sound_speed = 10.f, .decrease_rate = 0.8f};
   ir.ir_series.resize(200, 0.f);
-  ART::Ray ray1 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 10.f};
+  ART::Ray ray1 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 10.f,
+                 .source_hit_infos = {{1, 10.f}, {2, 10.f}, {3, 15.f}}};
   ART::Ray ray2 {.direction = {1.f, 0.f}, .origin = {0.f, 0.f}, .ref_count = 2, .acc_length = 30.f};
 
   auto amp1 = ir.add_ray_hit(ray1);
-  NEARLY_EQ(amp1, 0.64f);
-  NEARLY_EQ(ir.ir_series[100], 0.64f);
+  NEARLY_EQ(amp1, 0.8f + 0.64f + 0.512f);
+  NEARLY_EQ(ir.ir_series[100], 1.44f);
+  NEARLY_EQ(ir.ir_series[150], 0.512f);
 
   auto amp2 = ir.add_ray_hit(ray2);
   NEARLY_EQ(amp2, 0.f);
